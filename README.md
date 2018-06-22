@@ -12,17 +12,19 @@ This tool allows the user to do the following operations on docker containers cr
 
 - Create your `docker-compose.yml` file. Make sure that all volumes that need to be backed up are named. Here's an example:
 
-    services:
-      postgres:
-        image: postgres:10
-        environment:
-          POSTGRES_USER: someuser
-          POSTGRES_PASSWORD: somepassword
-        volumes:
-          - database:/var/lib/postgresql/data
-        restart: always
+```YAML
+services:
+  postgres:
+    image: postgres:10
+    environment:
+      POSTGRES_USER: someuser
+      POSTGRES_PASSWORD: somepassword
     volumes:
-      database:
+      - database:/var/lib/postgresql/data
+    restart: always
+volumes:
+  database:
+```
 
 - Run `docker-compose up -d` on this file.
 - Do whatever you want to configure the container, add data, etc.
@@ -31,20 +33,20 @@ This tool allows the user to do the following operations on docker containers cr
 - Make `docker-backup.sh` executable like this: `chmod +x docker-backup.sh`
 - Create a file for backing up and restoring your stack. Let's name it `postgres_backup.sh`. Give it the following contents:
 
+```bash
+#!/usr/bin/env bash
 
-    #!/usr/bin/env bash
+ACTION=$1
 
-    ACTION=$1
-    
-    # You can add all your containers here. Once a container is running,
-    # the backup operation automatically detects what volumes it has and backs them up.
-    ./docker-backup.sh $ACTION drupal_postgres_1
+# You can add all your containers here. Once a container is running,
+# the backup operation automatically detects what volumes it has and backs them up.
+./docker-backup.sh $ACTION drupal_postgres_1
 
-    # The script isn't smart enough to know what the container IDs for the docker-compose file are,
-    # so you have to have a separate line for each container:
-    #./docker-backup.sh $ACTION myservice2
-    #./docker-backup.sh $ACTION myservice3
-
+# The script isn't smart enough to know what the container IDs for the docker-compose file are,
+# so you have to have a separate line for each container:
+#./docker-backup.sh $ACTION myservice2
+#./docker-backup.sh $ACTION myservice3
+```
 
 - This file will be used to backup and restore the Docker application
 - Make this file executable: `chmod +x postgres_backup.sh`
@@ -56,21 +58,21 @@ This tool allows the user to do the following operations on docker containers cr
   - Each container has a single file named `volumes.txt` which contains the list of volumes and mountpoints for that container.
 - To restore a backup, change the docker-compose file so that all the volumes are external, and have the `<COMPOSER_PROJECT>_VOLUME`. So for example, if your `docker-compose.yml` is in the folder `postgres`, the `docker-compose.yml` file should look like this:
 
-
-    services:
-      postgres:
-        image: postgres:10
-        environment:
-          POSTGRES_USER: someuser
-          POSTGRES_PASSWORD: somepassword
-        volumes:
-          - database:/var/lib/postgresql/data
-        restart: always
+```YAML
+services:
+  postgres:
+    image: postgres:10
+    environment:
+      POSTGRES_USER: someuser
+      POSTGRES_PASSWORD: somepassword
     volumes:
-      database:
-        external:
-          name: postgres-database
-
+      - database:/var/lib/postgresql/data
+    restart: always
+volumes:
+  database:
+    external:
+      name: postgres-database
+```
           
 - Once this has been done, you can `docker-compose kill` and `docker-compose rm -v` to remove any containers and volumes created by docker-compose.
 - To do the actual restore, run `./postgres-backup restore`.
