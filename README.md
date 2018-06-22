@@ -31,6 +31,7 @@ This tool allows the user to do the following operations on docker containers cr
 - Make `docker-backup.sh` executable like this: `chmod +x docker-backup.sh`
 - Create a file for backing up and restoring your stack. Let's name it `postgres_backup.sh`. Give it the following contents:
 
+
     #!/usr/bin/env bash
 
     ACTION=$1
@@ -44,6 +45,7 @@ This tool allows the user to do the following operations on docker containers cr
     #./docker-backup.sh $ACTION myservice2
     #./docker-backup.sh $ACTION myservice3
 
+
 - This file will be used to backup and restore the Docker application
 - Make this file executable: `chmod +x postgres_backup.sh`
 - Back up the application by running `./postgres_backup.sh backup`
@@ -53,6 +55,7 @@ This tool allows the user to do the following operations on docker containers cr
   - Each folder contains a `*.tar` file for each volume in that container.
   - Each container has a single file named `volumes.txt` which contains the list of volumes and mountpoints for that container.
 - To restore a backup, change the docker-compose file so that all the volumes are external, and have the `<COMPOSER_PROJECT>_VOLUME`. So for example, if your `docker-compose.yml` is in the folder `postgres`, the `docker-compose.yml` file should look like this:
+
 
     services:
       postgres:
@@ -68,6 +71,7 @@ This tool allows the user to do the following operations on docker containers cr
         external:
           name: postgres-database
 
+          
 - Once this has been done, you can `docker-compose kill` and `docker-compose rm -v` to remove any containers and volumes created by docker-compose.
 - To do the actual restore, run `./postgres-backup restore`.
 - To start the newly-restored application, run `docker-compose up -d`.
