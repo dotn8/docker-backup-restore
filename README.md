@@ -29,8 +29,8 @@ volumes:
 - Run `docker-compose up -d` on this file.
 - Do whatever you want to configure the container, add data, etc.
 - `cd` to the path that has the docker-compose file
-- Download `docker-backup.sh` and put it in the same folder as the docker-compose file.
-- Make `docker-backup.sh` executable like this: `chmod +x docker-backup.sh`
+- Download [docker-backup.sh](https://github.com/dotn8/docker-backup-restore/blob/master/docker-backup.sh) and put it in the same folder as the docker-compose file.
+- Make `docker-backup.sh` executable by running this: `chmod +x docker-backup.sh`
 - Create a file for backing up and restoring your stack. Let's name it `postgres_backup.sh`. Give it the following contents:
 
 ```bash
