@@ -73,7 +73,7 @@ volumes:
     external:
       name: postgres-database
 ```
-          
+
 - Once this has been done, you can `docker-compose kill` and `docker-compose rm -v` to remove any containers and volumes created by docker-compose.
 - To do the actual restore, run `./postgres-backup restore`.
 - To start the newly-restored application, run `docker-compose up -d`.
@@ -83,5 +83,7 @@ volumes:
 
 Here are some things that need to be done next on this repository:
 
-- Make the script automatically detect the containers in the docker-compose file. (This might require switching to a different language than bash, ugh.)
+- Automatically create the initial volumes, so that the volumes can be external from the start.
+- Make the script automatically detect the containers in the docker-compose file. (This might require switching to a different language than bash, ugh.) This would eliminate the need for a custom script alongside the `docker-compose.yml` file.
 - Snapshot the containers before backing them up. I think this might make it unnecessary to kill the docker-compose application when backing it up.
+- Make backups be a single `.tar.gz` file, including the docker-compose file for reference.
